@@ -1,0 +1,19 @@
+{
+  "name": "carrieverse-region-api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com:imantisco/carrieverse-region-api.git"
+  },
+  "author": "carrieverse",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/imantisco/carrieverse-region-api/issues"
+  },
+  "homepage": "https://github.com/imantisco/carrieverse-region-api#readme"
+}
