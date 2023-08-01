@@ -5,15 +5,24 @@ const logger = require('./config/logger');
 const morgan = require('./config/morgan');
 const { errorHandler } = require('./middlewares/error');
 const ApiError = require('./utils/api-error');
+const routes = require('./hello.route');
 
 async function bootstrap() {
   const app = express();
   const port = config.port;
 
+  // parse json request body
+  app.use(express.json());
+
+  // parse urlencoded request body
+  app.use(express.urlencoded({ extended: true }));
+
   if (config.env !== 'test') {
     app.use(morgan.successHandler);
     app.use(morgan.errorHandler);
   }
+
+  app.use('/v1', routes);
 
   // 잘못된 api 접근시 에러처리
   app.use((req, res, next) => {
