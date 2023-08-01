@@ -1,13 +1,14 @@
-async function bootstrap() {
-  const express = require('express');
-  const httpStatus = require('http-status');
-  const config = require('./config/config');
-  const { errorHandler } = require('./middlewares/error');
-  const ApiError = require('./utils/api-error');
+const express = require('express');
+const httpStatus = require('http-status');
+const config = require('./config/config');
+const logger = require('./config/logger');
+const { errorHandler } = require('./middlewares/error');
+const ApiError = require('./utils/api-error');
 
+async function bootstrap() {
   const app = express();
   const port = config.port;
-
+  
   // 잘못된 api 접근시 에러처리
   app.use((req, res, next) => {
     next(new ApiError(httpStatus.NOT_FOUND, 'Not found'));
@@ -17,13 +18,13 @@ async function bootstrap() {
   app.use(errorHandler);
 
   const server = app.listen(port, () => {
-    console.log(`Listening to port ${port}`);
+    logger.info(`Listening to port ${port}`);
   });
 
   const exitHandler = () => {
     if (server) {
       server.close(() => {
-        console.log('Server closed');
+        logger.info('Server closed');
         process.exit(1);
       });
     } else {
@@ -32,7 +33,7 @@ async function bootstrap() {
   };
 
   const unexpectedErrorHandler = (error) => {
-    console.log(error);
+    logger.error(error);
     exitHandler();
   };
 
@@ -40,7 +41,7 @@ async function bootstrap() {
   process.on('unhandledRejection', unexpectedErrorHandler);
 
   process.on('SIGTERM', () => {
-    console.log('SIGTERM received');
+    logger.info('SIGTERM received');
     if (server) {
       server.close();
     }

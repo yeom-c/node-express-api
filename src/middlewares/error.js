@@ -1,5 +1,6 @@
 const httpStatus = require('http-status');
-const ApiError = require('../utils/api-error');
+const config = require('../config/config');
+const logger = require('../config/logger');
 
 const errorHandler = (err, req, res, next) => {
   let { statusCode, message } = err;
@@ -14,6 +15,10 @@ const errorHandler = (err, req, res, next) => {
     error: statusCode,
     message,
   };
+
+  if (config.env === 'development') {
+    logger.error(err);
+  }
 
   res.status(statusCode).send(response);
 };
